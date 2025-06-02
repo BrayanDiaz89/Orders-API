@@ -15,7 +15,7 @@ public record ProductsListDTO(
         Double precioUnidad,
         @Min(value = 1, message = "La cantidad del producto debe ser almenos 1.")
         @NotNull(message = "Debes ingresar la cantidad de este producto.")
-        Integer cantidad,
+        Integer quantity,
         @Positive(message = "El peso del producto (en libras), debe ser un valor positivo.")
         @NotNull(message = "Debe ingresar un peso en libras del producto.")
         Double pesoEnLibraPorUnidad
