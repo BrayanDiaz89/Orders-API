@@ -5,6 +5,7 @@ public enum CityEnum {
     BOGOTA,
     CALI,
     MEDELLIN,
+    ARMENIA,
     BUCARAMANGA,
     PEREIRA,
     MANIZALES,
