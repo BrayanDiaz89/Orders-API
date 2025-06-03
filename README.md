@@ -51,19 +51,46 @@ Una API RESTful desarrollada en **Java + Spring Boot** para procesar pedidos con
 
 ---
 
+## 🧾 JSON de entrada esperado
+
+```json
+{
+  "products": [
+    {
+      "idProduct": "PROD005",
+      "nombre": "Fresas",
+      "precioUnidad": 30000.0,
+      "quantity": 4,
+      "pesoEnLibraPorUnidad": 0.5
+    }
+  ],
+  "orderDTO": {
+    "idOrder": "ORD00004",
+    "city": "MEDELLIN",
+    "idClient": "CLIENT004",
+    "stratum": 1
+  }
+}}
+}
+
+📌 Puedes agregar todos los productos que desees. El sistema se encargará automáticamente de calcular el total, aplicar descuentos y recargos si corresponden.
+
+
 ## ✅ Ejemplo de respuesta JSON
 
 ```json
 {
-	"idOrder": "ORD00004",
-	"ciudadDestino": "MEDELLIN",
-	"idClient": "CLIENT004",
-	"precioTotalSinDescuento": 120000,
-	"precioDeEnvio": 25000,
-	"precioDeRecargoProductoPorEnvio": 0,
-	"descuento": true,
-	"porcentajeDescontado": 0.1,
-	"valorTotalADescontar": 12000,
-	"precioTotalAPagar": 133000,
-	"pesoDelPedidoEnKg": 0.91
+  "idOrder": "ORD00004",
+  "ciudadDestino": "MEDELLIN",
+  "idClient": "CLIENT004",
+  "precioTotalSinDescuento": 120000,
+  "precioDeEnvio": 25000,
+  "precioDeRecargoProductoPorEnvio": 0,
+  "descuento": true,
+  "porcentajeDescontado": 0.1,
+  "valorTotalADescontar": 12000,
+  "precioTotalAPagar": 133000,
+  "pesoDelPedidoEnKg": 0.91
 }
+
+📝 La respuesta incluye todos los cálculos aplicados: descuentos, envíos, recargos por ciudad, y conversión de peso del pedido a kilogramos.
