@@ -1,4 +1,4 @@
-package com.excercise.orders_api.dtos;
+package com.excercise.orders_api.dtos.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

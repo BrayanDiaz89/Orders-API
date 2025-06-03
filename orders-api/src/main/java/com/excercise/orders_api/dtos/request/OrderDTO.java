@@ -1,4 +1,4 @@
-package com.excercise.orders_api.dtos;
+package com.excercise.orders_api.dtos.request;
 
 import com.excercise.orders_api.enums.CityEnum;
 import jakarta.validation.constraints.*;
