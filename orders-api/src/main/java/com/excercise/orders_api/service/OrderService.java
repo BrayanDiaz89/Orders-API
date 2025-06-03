@@ -4,6 +4,7 @@ import com.excercise.orders_api.dtos.OrderDTO;
 import com.excercise.orders_api.dtos.PayloadDTO;
 import com.excercise.orders_api.dtos.ProductsListDTO;
 import com.excercise.orders_api.dtos.ResponseOrderDTO;
+import com.excercise.orders_api.enums.CityEnum;
 import com.excercise.orders_api.service.validations.services.CitySurchageCalculator;
 import com.excercise.orders_api.service.validations.services.DiscountCalculator;
 import com.excercise.orders_api.service.validations.services.ShippingCostCalculator;
@@ -20,7 +21,7 @@ public class OrderService {
     @Autowired
     private CitySurchageCalculator citySurchageCalculator;
     @Autowired
-    private DiscountCalculator discuountCalculator;
+    private DiscountCalculator discountCalculator;
     @Autowired
     private ShippingCostCalculator shippingCostCalculator;
 
@@ -32,14 +33,40 @@ public class OrderService {
                 .mapToDouble(product -> product.pesoEnLibraPorUnidad() * product.quantity())
                 .sum();
         double shipingCost = shippingCostCalculator.calculateCBaseCost(totalWeightInLb);
-
+        //Obtener cantidad de productos comprados, para el recargo por envío de cada uno, para la ciudad destino
         int quantityProductsOrder = products.stream()
-                .mapToInt(product -> product.quantity())
+                .mapToInt(ProductsListDTO::quantity)
                 .sum();
+        //Peso en Kilogramos del pedido completo
+        double weightInUnd = products.stream()
+                .mapToDouble(product -> (product.pesoEnLibraPorUnidad() * product.quantity()) / 2)
+                .sum();
+        //Obtener atributos de order
+        CityEnum city = order.city();
         int stratumOrder = order.stratum();
-        double citySurchageCost = citySurchageCalculator.calculateSurcharge(order.city(), quantityProductsOrder, stratumOrder);
-        
+        String idOrder = order.idOrder();
+        String idClient = order.idClient();
+        //Valor total de los productos sin descuento.
+        double subTotal = subtotalCalculator.calculateSubtotal(products);
+        //Recargo de envío, por cada producto según ciudad y estrato
+        double citySurchageCost = citySurchageCalculator.calculateSurcharge(city, quantityProductsOrder, stratumOrder, subTotal);
+        //Variable que almacena el % a descontar, según criterio de precio total de productos, sin envío.
+        double discountPercentege = discountCalculator.getDiscountCalculator(subTotal);
+        //Variable booleana, para confirmar si el pedido tiene descuento o no.
+        boolean existsDiscount = discountCalculator.isHightValuePurchase(subTotal);
+        //Calcular valor de los productos con descuento
+        double totalValueWithDiscount = subTotal - (subTotal * discountPercentege);
+        //Calcular valor total del pedido con envíos, recargos y descuento.
+        double totalAmountToPay = citySurchageCost + totalValueWithDiscount + shipingCost;
 
+        return new ResponseOrderDTO(
+                idOrder,
+                city,
+                idClient,
+                subTotal,
+                existsDiscount,
+                totalAmountToPay,
+                weightInUnd
+        );
     }
-
 }
