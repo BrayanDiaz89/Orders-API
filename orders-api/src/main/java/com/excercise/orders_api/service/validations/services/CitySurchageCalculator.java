@@ -8,7 +8,7 @@ public class CitySurchageCalculator {
 
     public double calculateSurcharge(CityEnum city, int productsQuantity, int stratum, double subtotal){
         if(subtotal > 250000 || stratum == 1 || stratum == 2) return 0;
-        int surchageCalculator = switch (city){
+        double surchageCalculator = switch (city){
             case IBAGUE, BOGOTA -> 4000;
             case CALI, MEDELLIN -> 5000;
             case ARMENIA, PEREIRA, MANIZALES, BUCARAMANGA -> 6000;

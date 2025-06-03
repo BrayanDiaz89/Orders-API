@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 public class DiscountCalculator {
 
     public double getDiscountCalculator(double subtotal){
-        if(subtotal >= 100000 && subtotal < 149000){
+        if(subtotal >= 100000 && subtotal < 149999){
             return 0.1;
         } else if(subtotal <= 250000){
             return 0.2;

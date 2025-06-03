@@ -11,11 +11,14 @@ import com.excercise.orders_api.service.validations.services.ShippingCostCalcula
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
 public class OrderService {
 
+    private final double weightLbConvertKg = 0.45359237;
     @Autowired
     private SubtotalCalculator subtotalCalculator;
     @Autowired
@@ -38,9 +41,11 @@ public class OrderService {
                 .mapToInt(ProductsListDTO::quantity)
                 .sum();
         //Peso en Kilogramos del pedido completo
-        double weightInUnd = products.stream()
-                .mapToDouble(product -> (product.pesoEnLibraPorUnidad() * product.quantity()) / 2)
+        double totalWeightInKg = products.stream()
+                .mapToDouble(product -> (product.pesoEnLibraPorUnidad() * product.quantity()) / weightLbConvertKg)
                 .sum();
+        //Redondear resultado a 2 décimales.
+        BigDecimal roundTotalWeightInKgUnd = new BigDecimal(totalWeightInKg).setScale(2, RoundingMode.HALF_UP);
         //Obtener atributos de order
         CityEnum city = order.city();
         int stratumOrder = order.stratum();
@@ -66,7 +71,7 @@ public class OrderService {
                 subTotal,
                 existsDiscount,
                 totalAmountToPay,
-                weightInUnd
+                roundTotalWeightInKgUnd
         );
     }
 }

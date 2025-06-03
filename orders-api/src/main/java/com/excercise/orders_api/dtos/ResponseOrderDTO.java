@@ -2,6 +2,8 @@ package com.excercise.orders_api.dtos;
 
 import com.excercise.orders_api.enums.CityEnum;
 
+import java.math.BigDecimal;
+
 public record ResponseOrderDTO(
     String idOrder,
     CityEnum ciudadDestino,
@@ -9,6 +11,6 @@ public record ResponseOrderDTO(
     Double precioTotalSinDescuento,
     Boolean descuento,
     Double precioTotalAPagar,
-    Double pesoDelPedidoEnKg
+    BigDecimal pesoDelPedidoEnKg
 ) {
 }
