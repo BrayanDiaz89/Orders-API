@@ -74,6 +74,8 @@ public class OrderService {
                 shippingCost,
                 citySurchageCost,
                 existsDiscount,
+                discountPercentege,
+                discountAmount,
                 totalAmountToPay,
                 roundTotalWeightInKgUnd
         );

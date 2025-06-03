@@ -12,6 +12,8 @@ public record ResponseOrderDTO(
     Double precioDeEnvio,
     Double precioDeRecargoProductoPorEnvio,
     Boolean descuento,
+    Double porcentajeDescontado,
+    Double valorTotalADescontar,
     Double precioTotalAPagar,
     BigDecimal pesoDelPedidoEnKg
 ) {
