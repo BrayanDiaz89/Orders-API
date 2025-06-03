@@ -55,13 +55,15 @@ Una API RESTful desarrollada en **Java + Spring Boot** para procesar pedidos con
 
 ```json
 {
-  "idOrder": "ORD-12345",
-  "city": "MEDELLIN",
-  "idClient": "CL-1001",
-  "subTotal": 240000,
-  "shippingCost": 25000,
-  "citySurchageCost": 30000,
-  "existsDiscount": true,
-  "totalAmountToPay": 222000,
-  "totalWeightInKg": 18.14
+	"idOrder": "ORD00004",
+	"ciudadDestino": "MEDELLIN",
+	"idClient": "CLIENT004",
+	"precioTotalSinDescuento": 120000,
+	"precioDeEnvio": 25000,
+	"precioDeRecargoProductoPorEnvio": 0,
+	"descuento": true,
+	"porcentajeDescontado": 0.1,
+	"valorTotalADescontar": 12000,
+	"precioTotalAPagar": 133000,
+	"pesoDelPedidoEnKg": 0.91
 }
