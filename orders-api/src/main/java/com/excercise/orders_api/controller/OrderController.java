@@ -1,7 +1,7 @@
 package com.excercise.orders_api.controller;
 
-import com.excercise.orders_api.dtos.PayloadDTO;
-import com.excercise.orders_api.dtos.ResponseOrderDTO;
+import com.excercise.orders_api.dtos.request.PayloadDTO;
+import com.excercise.orders_api.dtos.response.ResponseOrderDTO;
 import com.excercise.orders_api.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

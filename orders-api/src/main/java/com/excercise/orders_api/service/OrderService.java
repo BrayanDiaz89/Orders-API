@@ -1,9 +1,9 @@
 package com.excercise.orders_api.service;
 
-import com.excercise.orders_api.dtos.OrderDTO;
-import com.excercise.orders_api.dtos.PayloadDTO;
-import com.excercise.orders_api.dtos.ProductsListDTO;
-import com.excercise.orders_api.dtos.ResponseOrderDTO;
+import com.excercise.orders_api.dtos.request.OrderDTO;
+import com.excercise.orders_api.dtos.request.PayloadDTO;
+import com.excercise.orders_api.dtos.request.ProductsListDTO;
+import com.excercise.orders_api.dtos.response.ResponseOrderDTO;
 import com.excercise.orders_api.enums.CityEnum;
 import com.excercise.orders_api.service.validations.services.CitySurchageCalculator;
 import com.excercise.orders_api.service.validations.services.DiscountCalculator;
@@ -33,14 +33,15 @@ public class OrderService {
         double totalWeightInLb = products.stream()
                 .mapToDouble(product -> product.pesoEnLibraPorUnidad() * product.quantity())
                 .sum();
-        double shipingCost = shippingCostCalculator.calculateCBaseCost(totalWeightInLb);
+
+        double shippingCost = shippingCostCalculator.calculateCBaseCost(totalWeightInLb);
         //Obtener cantidad de productos comprados, para el recargo por envío de cada uno, para la ciudad destino
         int quantityProductsOrder = products.stream()
                 .mapToInt(ProductsListDTO::quantity)
                 .sum();
         //Peso en Kilogramos del pedido completo
         double totalWeightInKg = products.stream()
-                .mapToDouble(product -> (product.pesoEnLibraPorUnidad() * product.quantity()) / weightLbConvertKg)
+                .mapToDouble(product -> (product.pesoEnLibraPorUnidad() * product.quantity()) * weightLbConvertKg)
                 .sum();
         //Redondear resultado a 2 décimales.
         BigDecimal roundTotalWeightInKgUnd = new BigDecimal(totalWeightInKg).setScale(2, RoundingMode.HALF_UP);
@@ -58,17 +59,20 @@ public class OrderService {
         //Variable que almacena el % a descontar, según criterio de precio total de productos, sin envío.
         double discountPercentege = discountCalculator.getDiscountCalculator(subTotal);
         //Variable booleana, para confirmar si el pedido tiene descuento o no.
-        boolean existsDiscount = discountCalculator.isHightValuePurchase(subTotal);
+        boolean existsDiscount = discountPercentege > 0;
         //Calcular valor de los productos con descuento
-        double totalValueWithDiscount = subTotal - (subTotal * discountPercentege);
+        double discountAmount = subTotal * discountPercentege;
+        double totalValueWithDiscount = subTotal - discountAmount;
         //Calcular valor total del pedido con envíos, recargos y descuento.
-        double totalAmountToPay = citySurchageCost + totalValueWithDiscount + shipingCost;
+        double totalAmountToPay = totalValueWithDiscount + citySurchageCost + shippingCost;
 
         return new ResponseOrderDTO(
                 idOrder,
                 city,
                 idClient,
                 subTotal,
+                shippingCost,
+                citySurchageCost,
                 existsDiscount,
                 totalAmountToPay,
                 roundTotalWeightInKgUnd

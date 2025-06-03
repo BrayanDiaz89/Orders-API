@@ -1,4 +1,4 @@
-package com.excercise.orders_api.dtos;
+package com.excercise.orders_api.dtos.response;
 
 import com.excercise.orders_api.enums.CityEnum;
 
@@ -9,6 +9,8 @@ public record ResponseOrderDTO(
     CityEnum ciudadDestino,
     String idClient,
     Double precioTotalSinDescuento,
+    Double precioDeEnvio,
+    Double precioDeRecargoProductoPorEnvio,
     Boolean descuento,
     Double precioTotalAPagar,
     BigDecimal pesoDelPedidoEnKg
