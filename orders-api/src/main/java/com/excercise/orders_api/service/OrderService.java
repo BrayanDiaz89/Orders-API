@@ -20,8 +20,6 @@ public class OrderService {
 
     private final double weightLbConvertKg = 0.45359237;
     @Autowired
-    private SubtotalCalculator subtotalCalculator;
-    @Autowired
     private CitySurchageCalculator citySurchageCalculator;
     @Autowired
     private DiscountCalculator discountCalculator;
@@ -52,7 +50,9 @@ public class OrderService {
         String idOrder = order.idOrder();
         String idClient = order.idClient();
         //Valor total de los productos sin descuento.
-        double subTotal = subtotalCalculator.calculateSubtotal(products);
+        double subTotal = products.stream()
+                .mapToDouble(p-> p.precioUnidad() * p.quantity())
+                .sum();
         //Recargo de envío, por cada producto según ciudad y estrato
         double citySurchageCost = citySurchageCalculator.calculateSurcharge(city, quantityProductsOrder, stratumOrder, subTotal);
         //Variable que almacena el % a descontar, según criterio de precio total de productos, sin envío.
